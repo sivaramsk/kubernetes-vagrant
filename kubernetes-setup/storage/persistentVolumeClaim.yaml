@@ -1,0 +1,11 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nfs
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: nfs-local-storage
+  resources:
+    requests:
+      storage: 2Gi

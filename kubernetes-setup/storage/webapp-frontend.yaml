@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: web-frontend
+  name: web-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: web-frontend
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        run: web-frontend
+    spec:
+      containers:
+      - image: sivaramsk/webapp-golang:0.4
+        name: web-frontend
+        ports:
+          - name: web
+            containerPort: 5000
+        volumeMounts:
+          - name: nfs
+            mountPath: "/nfs"
+      volumes:
+      - name: nfs
+        persistentVolumeClaim:
+          claimName: my-claim

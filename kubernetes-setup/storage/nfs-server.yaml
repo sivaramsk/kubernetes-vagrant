@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: nfs-server
+  name: nfs-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: nfs-server
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        run: nfs-server
+    spec:
+      containers:
+      - image: itsthenetwork/nfs-server-alpine:latest
+        name: nfs-server
+        env: 
+        - name: SHARED_DIRECTORY
+          value: "/nfsshare/storage"
+        volumeMounts:
+          - name: nfs
+            mountPath: "/nfsshare/storage"
+      volumes:
+      - name: nfs
+        persistentVolumeClaim:
+          claimName: nfs
