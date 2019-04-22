@@ -122,7 +122,10 @@
 
   - name: Fetch the join command to the local machine
     fetch: src=/tmp/join-command dest=join-command.sh flat=yes
-  
+
+  - name: Setup Bash completion for kuectl
+    command: echo "source <(kubectl completion bash)" >> ~/.bashrc
+
   handlers:
     - name: docker status
       service: name=docker state=started
