@@ -1,4 +1,5 @@
 #!/bin/bash
+source versions
 
 function install_prereq_packages {
 	apt-get update && apt-get dist-upgrade && \
@@ -35,9 +36,9 @@ function install_k8s {
 	EOF'
 	   
 	   
-	sudo apt update
+	sudo apt update -y
 	   
-	sudo apt install -y kubelet kubeadm kubectl
+	sudo apt install -y kubelet=${K8S_UBUNTU_PACKAGE_VERSION} kubeadm=${K8S_UBUNTU_PACKAGE_VERSION} kubectl=${K8S_UBUNTU_PACKAGE_VERSION}
 }
 
 function initialize_k8s_kubeadm {

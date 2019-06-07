@@ -1,5 +1,6 @@
 IMAGE_NAME = "bento/ubuntu-16.04"
 N = 3
+K8S_UBUNTU_PACKAGE_VERSION=1.14.2-00
 
 Vagrant.configure("2") do |config|
     config.ssh.insert_key = false
