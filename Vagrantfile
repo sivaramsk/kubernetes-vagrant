@@ -1,5 +1,5 @@
 IMAGE_NAME = "bento/ubuntu-16.04"
-N = 3
+N = 1
 
 Vagrant.configure("2") do |config|
     config.ssh.insert_key = false
@@ -8,14 +8,12 @@ Vagrant.configure("2") do |config|
         master.vm.box = IMAGE_NAME
         master.vm.network "private_network", ip: "192.168.50.10"
         master.vm.hostname = "k8s-master"
-        master.vm.provision "ansible" do |ansible|
-            ansible.playbook = "setup/master-playbook.yml"
-        end
-
         master.vm.provider "virtualbox" do |v|
       		v.memory = 2048
  			v.cpus = 2
  		end
+        master.vm.provision "file", source: "./setup/install_components.sh", destination: "/home/vagrant/install_components.sh"
+        master.vm.provision "shell", inline: "/bin/bash /home/vagrant/install_components.sh"
     end
 
     (1..N).each do |i|
@@ -23,13 +21,12 @@ Vagrant.configure("2") do |config|
             node.vm.box = IMAGE_NAME
             node.vm.network "private_network", ip: "192.168.50.#{i + 10}"
             node.vm.hostname = "node-#{i}"
-            node.vm.provision "ansible" do |ansible|
-                ansible.playbook = "setup/node-playbook.yml"
-            end
             node.vm.provider "virtualbox" do |v|
       			v.memory = 2048
  				v.cpus = 1
  			end
+            node.vm.provision "file", source: "./setup/install_components.sh", destination: "/home/vagrant/install_components.sh"
+            node.vm.provision "shell", inline: "/bin/bash /home/vagrant/install_components.sh"
         end
     end
 end
