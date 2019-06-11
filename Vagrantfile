@@ -14,8 +14,8 @@ Vagrant.configure("2") do |config|
  		end
         master.vm.provision "file", source: "./setup/install_components.sh", destination: "/home/vagrant/install_components.sh"
         master.vm.provision "file", source: "./setup/master.sh", destination: "/home/vagrant/master.sh"
-        master.vm.provision "shell", inline: "/bin/bash /home/vagrant/install_components.sh"
-        master.vm.provision "shell", inline: "/bin/bash /home/vagrant/master.sh"
+        master.vm.provision "shell", inline: "/bin/bash /vagrant/setup/install_components.sh"
+        master.vm.provision "shell", inline: "/bin/bash /vagrant/setup/master.sh"
     end
 
     (1..N).each do |i|
@@ -27,10 +27,8 @@ Vagrant.configure("2") do |config|
       			v.memory = 2048
  				v.cpus = 1
  			end
-            node.vm.provision "file", source: "./setup/install_components.sh", destination: "/home/vagrant/install_components.sh"
-            node.vm.provision "file", source: "./setup/agent.sh", destination: "/home/vagrant/agent.sh"
-            node.vm.provision "shell", inline: "/bin/bash /home/vagrant/install_components.sh"
-            node.vm.provision "shell", inline: "/bin/bash /home/vagrant/agent.sh"
+            node.vm.provision "shell", inline: "/bin/bash /vagrant/setup/install_components.sh"
+            node.vm.provision "shell", inline: "/bin/bash /vagrant/setup/agent.sh"
         end
     end
 end
