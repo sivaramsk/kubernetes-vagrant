@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #Configurable Variables
-K8S_UBUNTU_PACKAGE_VERSION=1.14.2-00
+K8S_UBUNTU_PACKAGE_VERSION="1.14.2-00"
 
 function install_prereq_packages {
-	apt-get update && apt-get -y upgrade && \
+	apt-get update && \
 		apt-get install -y apt-transport-https \
 		ca-certificates \
 		curl \
@@ -15,12 +15,13 @@ function install_prereq_packages {
 
 
 function install_docker {
-	sudo apt-get install -y docker.io
-	sudo bash -c 'cat << EOF > /etc/docker/daemon.json
+	apt-get install -y docker.io
+
+	cat > /etc/docker/daemon.json <<- EOF
 	{
 	   "exec-opts": ["native.cgroupdriver=systemd"]
-        }
-	EOF'
+    }
+	EOF
 
 }
 
@@ -35,14 +36,12 @@ function disable_swap {
 function install_k8s {
 	curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 
-	sudo bash -c 'cat << EOF > /etc/apt/sources.list.d/kubernetes.list
+	cat > /etc/apt/sources.list.d/kubernetes.list <<- EOF
 	deb http://apt.kubernetes.io/ kubernetes-xenial main
-	EOF'
+	EOF
 
-
-	sudo apt update -y
-
-	sudo apt install -y kubelet=${K8S_UBUNTU_PACKAGE_VERSION} kubeadm=${K8S_UBUNTU_PACKAGE_VERSION} kubectl=${K8S_UBUNTU_PACKAGE_VERSION}
+	apt update -y 
+	apt install -y kubelet=${K8S_UBUNTU_PACKAGE_VERSION} kubeadm=${K8S_UBUNTU_PACKAGE_VERSION} kubectl=${K8S_UBUNTU_PACKAGE_VERSION}
 }
 
 function main {
