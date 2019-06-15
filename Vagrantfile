@@ -12,8 +12,6 @@ Vagrant.configure("2") do |config|
       		v.memory = 2048
  			v.cpus = 2
  		end
-        master.vm.provision "file", source: "./setup/install_components.sh", destination: "/home/vagrant/install_components.sh"
-        master.vm.provision "file", source: "./setup/master.sh", destination: "/home/vagrant/master.sh"
         master.vm.provision "shell", inline: "/bin/bash /vagrant/setup/install_components.sh"
         master.vm.provision "shell", inline: "/bin/bash /vagrant/setup/master.sh"
     end
