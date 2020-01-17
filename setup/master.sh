@@ -47,9 +47,9 @@ function setup_networking {
 
 	echo "Inside setup_networking"
 
-	wget -c https://docs.projectcalico.org/v2.0/getting-started/kubernetes/installation/policy-controller.yaml -O /home/vagrant/policy-controller.yaml
+	curl https://docs.projectcalico.org/v3.11/manifests/calico.yaml -O
 
-	su vagrant -c "kubectl create -f /home/vagrant/policy-controller.yaml"
+	su vagrant -c "kubectl apply -f /home/vagrant/calico.yaml"
 
 }
 
