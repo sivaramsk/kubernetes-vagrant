@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IPV4_ADDR=$(/sbin/ifconfig eth1 | awk -F ' *|:' '/inet addr/{print $4}')
+IPV4_ADDR=$(/sbin/ifconfig eth1 | awk -F ' *|:' '/inet /{print $3}')
 
 function init_k8s {
     	
