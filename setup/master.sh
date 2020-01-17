@@ -3,6 +3,9 @@
 IPV4_ADDR=$(/sbin/ifconfig eth1 | awk -F ' *|:' '/inet addr/{print $4}')
 
 function init_k8s {
+    	
+    	echo "Setting up K8S. Inside init_k8s"
+    	
 	kubeadm init --apiserver-advertise-address="11.18.50.10" --apiserver-cert-extra-sans="11.18.50.10"  --node-name k8s-master --pod-network-cidr=192.168.0.0/16
 
 	echo $IPV4_ADDR
@@ -21,10 +24,18 @@ function init_k8s {
 
 function setup_kubeconfig {
 
+	echo "Inside setup_kubeconfig"
+
 	RET_VAL=1
+	echo "Going to wait till the kubeapi is up and running...."
 	while [ $RET_VAL -ne 0 ]; do
 		sleep 5
-		RET_VAL=$(nc 11.18.50.10 6443 < /dev/null)
+		nc -zvw120 11.18.50.10 6443
+		RET_VAL=$?
+		if [ $RET_VAL -ne 0 ]; then
+		    echo "Unable to verify kubeapi has comeup. Quitting..."
+		    exit
+		fi
 	done
 
      mkdir -p /home/vagrant/.kube
@@ -33,13 +44,17 @@ function setup_kubeconfig {
 }
 
 function setup_networking {
-     	wget -c https://docs.projectcalico.org/v3.6/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml -O /home/vagrant/calico.yaml
 
-		su vagrant -c "kubectl create -f /home/vagrant/calico.yaml"
+	echo "Inside setup_networking"
+
+	wget -c https://docs.projectcalico.org/v2.0/getting-started/kubernetes/installation/policy-controller.yaml -O /home/vagrant/policy-controller.yaml
+
+	su vagrant -c "kubectl create -f /home/vagrant/policy-controller.yaml"
 
 }
 
 function setup_kubectl {
+    	echo "Inside setup_kubectl"
 	echo "source <(kubectl completion bash)" >> ~/.bashrc
 }
 
