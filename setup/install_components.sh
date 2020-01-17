@@ -1,10 +1,11 @@
 #!/bin/bash
 
 #Configurable Variables
-K8S_UBUNTU_PACKAGE_VERSION="1.14.2-00"
+K8S_UBUNTU_PACKAGE_VERSION="1.17.0-00"
+export DEBIAN_FRONTEND=noninteractive
 
 function install_prereq_packages {
-	apt-get update && \
+	apt-get -y update && \
 		apt-get install -y apt-transport-https \
 		ca-certificates \
 		curl \
